@@ -48,7 +48,7 @@ document.addEventListener('keypress', function (e) {
 [].forEach.call(questions, function (question, questionIndex) {
     var questionText = question.getElementsByClassName("qtext")[0].innerText;
     var qustionObjectFromResults = resultsFinal.filter(function (item) {
-        return levenshtein(item.question.toLowerCase().trim(), questionText.toLowerCase().trim()) < 3;
+        return levenshtein(item.question.toLowerCase().trim().split(' ').slice(0,5).join(' '), questionText.toLowerCase().trim().split(' ').slice(0,5).join(' ')) < 3;
     });
     var answers = qustionObjectFromResults.length ? qustionObjectFromResults.map(function (item) {
         return item.answer;
