@@ -34,6 +34,7 @@ var questions = document.getElementsByClassName('que');
 var answersString = '/';
 var oldPathname = window.location.pathname + window.location.search;
 var flag = true;
+
 document.addEventListener('keypress', function (e) {
     e.preventDefault();
     if (flag) {
@@ -43,20 +44,20 @@ document.addEventListener('keypress', function (e) {
     }
     flag = !flag;
 });
+
 [].forEach.call(questions, function (question, questionIndex) {
     var questionText = question.getElementsByClassName("qtext")[0].innerText;
-    // Получаем первые пять слов вопроса
-    var questionWords = questionText.trim().split(/\s+/).slice(0, 5).join(" ");
     var qustionObjectFromResults = resultsFinal.filter(function (item) {
-        // Сравниваем первые пять слов вопроса с первыми пятью словами каждого вопроса из результатов
-        return levenshtein(item.question.toLowerCase().trim().split(/\s+/).slice(0, 5).join(" "), questionWords.toLowerCase()) < 3;
+        return levenshtein(item.question.toLowerCase().trim(), questionText.toLowerCase().trim()) < 3;
     });
     var answers = qustionObjectFromResults.length ? qustionObjectFromResults.map(function (item) {
         return item.answer;
     }) : [];
+
     if (!answers.length) {
         console.log(questionIndex + 1, questionText);
     }
+
     var answerOptions = question.querySelectorAll(".answer>div");
     var rightOptions = '';
     [].forEach.call(answerOptions, function (elem, index) {
@@ -69,15 +70,16 @@ document.addEventListener('keypress', function (e) {
             });
         });
     });
+
     if (rightOptions === '') {
         console.log(answers);
         console.log(answers.join(';'));
         console.log(answers.join(';'));
-        rightOptions = answers.join('; ');
+        rightOptions = answers.join('; ');;
         console.log(rightOptions);
     }
+
     answersString += questionIndex + 1 + ':' + rightOptions + '-';
     var elements = question.querySelectorAll('.answer input');
     elements[elements.length - 1].setAttribute('title', questionIndex + 1 + ':' + rightOptions);
 });
-
